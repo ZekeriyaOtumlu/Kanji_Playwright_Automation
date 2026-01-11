@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "playwright test --project=chromium",
+        "test": "playwright test --project=chromium --headed",
         "test:file": "playwright test --project=chromium --headed tests/add-device.spec.ts",
         "test:tag": "playwright test --project=chromium --headed --grep @support",
         "codegen": "playwright codegen --output=tests/codegen.spec.ts https://qahw.kandji.io/signin"
