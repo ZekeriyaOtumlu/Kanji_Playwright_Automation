@@ -126,7 +126,3 @@ The framework includes smoke tests for critical application features:
 3. Add tests for new functionality
 4. Ensure all tests pass
 5. Submit a pull request
-
-## License
-
-This project is licensed under the ISC License.
