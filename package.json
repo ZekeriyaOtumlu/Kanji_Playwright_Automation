@@ -1,0 +1,22 @@
+{
+    "name": "iru_automation_playwright",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "playwright test --project=chromium",
+        "test:file": "playwright test --project=chromium --headed tests/add-device.spec.ts",
+        "test:tag": "playwright test --project=chromium --headed --grep @support",
+        "codegen": "playwright codegen --output=tests/codegen.spec.ts https://qahw.kandji.io/signin"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.57.0",
+        "@types/node": "^25.0.6"
+    },
+    "dependencies": {
+        "dotenv": "^17.2.3"
+    }
+}

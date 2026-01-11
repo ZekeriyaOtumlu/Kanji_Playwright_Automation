@@ -1,0 +1,69 @@
+name: Run Tests
+
+on:
+    workflow_dispatch:
+      inputs:
+        browser:
+          description: "Browser to test"
+          type: choice
+          required: true
+          default: "chromium"
+          options:
+            - "chromium"
+            - "firefox"
+            - "webkit"
+        tag:
+          description: "Select a test tag to run:"
+          type: choice
+          required: true
+          options:
+            - "recovery"
+            - "support"
+            - "add-device"
+        run-all-tests:
+          description: "Select to run all tests"
+          type: boolean
+          default: false
+          required: false
+
+concurrency:
+  group: "run-tests-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    env: 
+      TAG: ${{ inputs.tag }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v4
+    
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run all Playwright tests
+        if: ${{ inputs.run-all-tests }}
+        run: npx playwright test --project=${{ inputs.browser }}
+
+      - name: Run Playwright tests by tag
+        if: ${{ !inputs.run-all-tests }}
+        run: npx playwright test --project=${{ inputs.browser }} --grep "@${{ env.TAG }}"
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
